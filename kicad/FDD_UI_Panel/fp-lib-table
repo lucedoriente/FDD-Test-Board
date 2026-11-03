@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "FDD_UI_Panel")(type "KiCad")(uri "${KIPRJMOD}/FDD_UI_Panel.pretty")(options "")(descr "Local footprints for FDD UI Panel"))
+)

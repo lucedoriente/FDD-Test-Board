@@ -1,0 +1,34 @@
+# KiCad temporary and backup files
+*.bak
+*-bak
+*-bak-*
+_autosave-*
+*.kicad_prl
+*.lck
+fp-info-cache
+*-backups/
+_norton_/
+*-nozones*
+test_*
+*.rpt
+
+# Build outputs
+build/
+*.o
+*.obj
+*.elf
+*.bin
+*.hex
+*.map
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# OS / Editor files
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/

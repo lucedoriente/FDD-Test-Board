@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "FDD-Test-Board")(type "KiCad")(uri "${KIPRJMOD}/FDD-Test-Board.pretty")(options "")(descr "Libreria impronte di progetto Retro-Diag FDD-Test-Board"))
+)
