@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- STRMRK:"PAGEHEAD" -->
+	<head>
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="stylesheet" type="text/css" href="stylehp.css">
+		<script type="text/javascript" src="utils.js"></script>
+
+		<title>HxC2001 : Universal Floppy Disk drive replacement/emulator solutions</title>
+
+		<link rel="shortcut icon"  href="pofasm.ico" type="image/x-icon">
+		<link rel="icon" href="pofasm.ico" type="image/x-icon">
+		<meta name="description" content="HxC2001 HeadQuarters : Universal Floppy Disk drive emulators / replacement solutions">
+		<meta name="keywords" content="Floppy, disk, drive, replacement, disquette">
+		<meta http-equiv="content-Type" content="text/html; charset=utf-8">
+		<meta name="Author" content="HxC2001 Tech">
+		<meta name="Owner" content="HxC2001 Tech">
+		<meta name="Language" content="EN">
+		<meta name="Identifier-url" content="https://hxc2001.com">
+		<meta name="dc.language" content="en">
+		<meta name="robots" content="index, follow">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<link href="./pagefind/pagefind-ui.css" rel="stylesheet" />
+		<script src="./pagefind/pagefind-ui.js" is:inline></script>
+	</head>
+<!-- ENDMRK:"PAGEHEAD" -->
+
+	<body onload="load_yt_embed()" data-pagefind-body>
+
+		<!-- STRMRK:"SITEMENU" -->
+		<div  class="topnav_sticky"><div class="topnav" id="PageTopNav">
+			<a href="./" class="logo"><img alt="HxC2001" src="img/hxc_fe_logo_1.png" width="46" height="46"></a>
+			<a href="./" class="active">Home</a>
+			<div class="dropdown">
+				<button class="dropbtn">Products
+					<i class="fa fa-caret-down"></i>
+				</button>
+				<div class="dropdown-content">
+					<a href="floppy_drive_emulator/">SD HxC Floppy Emulators</a>
+					<a href="docs/gotek-floppy-emulator-hxc-firmware/">HxC Firmware for Gotek floppy emulators</a>
+					<a href="download/floppy_drive_emulator/support.htm">HxC Floppy Emulators compatibility list</a>
+				</div>
+			</div>
+			<a href="showroom/">Showroom</a>
+			<a href="https://hxc2001.com/floppy/forum/" target="_blank" rel="noopener">Forum</a>
+			<div class="dropdown">
+				<button class="dropbtn">&#x1F6D2;Purchase
+					<i class="fa fa-caret-down"></i>
+				</button>
+				<div class="dropdown-content">
+					<a href="floppy_drive_emulator/#SALESPOINTS">SD HxC Floppy Emulators</a>
+					<a href="store/">HxC Firmware for Gotek floppy emulators</a>
+				</div>
+			</div>
+			<div class="dropdown">
+				<button class="dropbtn">&#x1F4BE;Download
+					<i class="fa fa-caret-down"></i>
+				</button>
+				<div class="dropdown-content">
+					<a href="download/floppy_drive_emulator/">Softwares</a>
+					<a href="download/floppy_drive_emulator/#sdhxc">SD HxC Floppy Emulators</a>
+					<a href="download/floppy_drive_emulator/#slimsdhxc">Slim SD Card HxC Floppy Emulators</a>
+					<a href="download/floppy_drive_emulator/#cpldusbhxc">USB HxC Floppy Emulators</a>
+					<a href="download/floppy_drive_emulator/#stm32hxc">HxC firmwares for Gotek Floppy Emulators</a>
+				</div>
+			</div>
+			<a href="contactus/">&#x1F4E7;Contact</a>
+			<a href="search/">&#x1F50D;Search</a>
+			<a href="#" class="icon" onclick="return topnav_responsive()">Menu &#9776;</a>
+		</div></div>
+		<!-- ENDMRK:"SITEMENU" -->
+
+		<h1 class="hp"><b><i>HxC2001 products & softwares support</i></b></h1>
+
+		<div class="embed-yt" data-video-id="ALwr-WdYnx8" data-file="HxC_Floppy_Emulator_Products_and_usages_slideshow.mp4" style="width: 480px; height:270px">
+			<div class="embed-yt-play"></div>
+		</div>
+
+		<div>
+			<p class="hp">
+				<b><a href="/download/floppy_drive_emulator/SDCard_HxC_Floppy_Emulator_Product_Brief.pdf" target="_blank" rel="noopener">
+					<i>SD HxC Floppy Emulator Product Brief</i>
+				</a></b>
+			</p>
+		</div>
+
+		<table class="hp">
+			<tr>
+				<td>
+					<b><a href="floppy_drive_emulator/" title="HxC Floppy Emulator Project page" target="_blank" rel="noopener">Project page</a></b>
+				</td>
+				<td>
+					<b><a href="download/floppy_drive_emulator/" title="HxC software/firmware download page">Download</a></b>
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					<b><a href="download/floppy_drive_emulator/support.htm" title="HxC floppy emulators Compatibility list">Supported Machines</a></b>
+				</td>
+				<td>
+					<b><a href="showroom/" title="HxC Floppy Emulator Showroom">Showroom</a></b>
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					<b><a href="store/" title="Software store">Software Store<br><img src="img/mini_buy_icon.gif" alt="Buy!" width="28" height="29"></a></b>
+
+				</td>
+				<td>
+					<b><a href="floppy_drive_emulator/#SALESPOINTS" title="HxC Floppy Emulator sale points" target="_blank" rel="noopener">Hardware Sale points<br><img src="img/mini_buy_icon.gif" alt="Buy!" width="28" height="29"></a></b>
+				</td>
+			</tr>
+
+			<tr>
+				<td colspan="2">
+					<b><a href="https://hxc2001.com/floppy/forum/index.php" title="HxC support Forum" target="_blank" rel="noopener">Support Forum</a></b>
+				</td>
+			</tr>
+		</table>
+		<br>
+		<p class="hp">
+			<a href="showroom/" title="HxC Floppy Emulators showroom" ><b>&gt;Some examples of floppy disk drive retrofits!&lt;</b></a>
+			<br><br>
+			<a href="download/floppy_drive_emulator/support.htm" title="HxC Floppy Emulators compatibility list"><b>&gt;Machines compatibility list&lt;</b></a>
+		</p>
+
+		<p class="hp">
+			<img alt="Contact email" src="img/email.jpg" width="200" height="42"><br>
+		</p>
+
+		<!-- STRMRK:"PAGEFOOTER" -->
+		<hr>
+
+		<table class="foot_page">
+			<tbody>
+				<tr>
+					<td>
+						HxC Floppy Emulator project
+					</td>
+					<td>
+						<a href="/mentions-legales/">Legal Mentions</a>
+					</td>
+					<td class="rightalign">
+						(C)2006-2026 HxC2001 / Jean-Fran&ccedil;ois DEL NERO
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<!-- ENDMRK:"PAGEFOOTER" -->
+
+	</body>
+
+</html>

@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Retro-Diag FDD Master Tester - Digital Twin Firmware Emulator</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    @font-face {
+      font-family: 'PixelLCD';
+      src: local('Courier New'), monospace;
+    }
+    .pixel-canvas {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+    .lcd-frame {
+      box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.9), 0 0 24px rgba(0, 180, 255, 0.2);
+      border: 3px solid #1e293b;
+    }
+    .crt-scanlines {
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+      background-size: 100% 4px;
+      pointer-events: none;
+    }
+    .cli-terminal {
+      font-family: 'Courier New', Courier, monospace;
+      background-color: #050811;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-4 flex flex-col items-center select-none font-sans">
+
+  <!-- Top Instrument Header -->
+  <div class="max-w-5xl w-full mb-3 flex items-center justify-between border-b border-slate-800 pb-2">
+    <div class="flex items-center gap-3">
+      <div class="w-3.5 h-3.5 rounded-full bg-cyan-400 shadow-[0_0_10px_cyan] animate-pulse"></div>
+      <div>
+        <h1 class="text-lg font-bold tracking-wider text-cyan-400 uppercase">Retro-Diag FDD Master Tester</h1>
+        <p class="text-[11px] text-slate-400">Digital Twin Firmware & Hardware Emulator — Real-time Simulation Engine</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <button id="btn-audio-toggle" onclick="toggleAudio()" class="text-xs font-mono px-2.5 py-1 rounded bg-slate-900 border border-slate-700 hover:border-cyan-500 text-cyan-300 transition-colors">
+        🔊 AUDIO: <span id="audio-state">ON</span>
+      </button>
+      <span class="text-xs font-mono bg-cyan-950/80 text-cyan-300 px-2 py-1 rounded border border-cyan-800">
+        STM32F407 @ 168MHz | Superloop 50Hz
+      </span>
+    </div>
+  </div>
+
+  <!-- Main Instrument Rack Layout -->
+  <div class="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-12 gap-5">
+
+    <!-- LEFT COLUMN: Physical Hardware Bezel (Display, LEDs, Rotary Knob, Pushbuttons) -->
+    <div class="lg:col-span-7 bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-2xl flex flex-col items-center justify-between">
+      
+      <!-- Top Bezel Info -->
+      <div class="w-full flex justify-between items-center text-xs font-mono text-slate-400 mb-2 border-b border-slate-800 pb-1">
+        <span class="text-slate-300 font-bold">FRONT PANEL (FDD_UI_Panel v1.0)</span>
+        <span id="state-indicator" class="text-cyan-400 font-bold">BOOT_SELF_TEST</span>
+      </div>
+
+      <!-- The Real 160x80 Pixel Canvas (Scaled 3x = 480x240) -->
+      <div class="relative rounded-lg overflow-hidden lcd-frame bg-[#060a12] my-1">
+        <canvas id="lcd" width="160" height="80" class="pixel-canvas w-[480px] h-[240px] block"></canvas>
+        <div class="absolute inset-0 crt-scanlines"></div>
+      </div>
+
+      <!-- Front Panel LEDs -->
+      <div class="w-[480px] mt-2 flex justify-around items-center bg-slate-950 py-1.5 px-3 rounded border border-slate-800">
+        <div class="flex items-center gap-1.5">
+          <div id="led-ready" class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e]"></div>
+          <span class="text-[11px] font-mono text-slate-400">READY</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <div id="led-busy" class="w-2.5 h-2.5 rounded-full bg-amber-950 border border-amber-800"></div>
+          <span class="text-[11px] font-mono text-slate-400">BUSY</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <div id="led-fault" class="w-2.5 h-2.5 rounded-full bg-red-950 border border-red-800"></div>
+          <span class="text-[11px] font-mono text-slate-400">FAULT</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <div id="led-index" class="w-2.5 h-2.5 rounded-full bg-blue-950 border border-blue-800"></div>
+          <span class="text-[11px] font-mono text-slate-400">INDEX</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <div id="led-read" class="w-2.5 h-2.5 rounded-full bg-cyan-950 border border-cyan-800"></div>
+          <span class="text-[11px] font-mono text-slate-400">READ</span>
+        </div>
+      </div>
+
+      <!-- Physical Controls Section -->
+      <div class="w-[480px] mt-4 flex items-center justify-between bg-slate-950/80 p-3 rounded-lg border border-slate-800">
+        
+        <!-- Pushbutton BACK (ESC) -->
+        <button onclick="handleBtnBack()" class="w-24 py-2 bg-rose-950/80 hover:bg-rose-900 text-rose-200 border border-rose-700 rounded-lg font-mono text-xs font-bold active:scale-95 shadow transition-all">
+          [ BACK ]
+        </button>
+
+        <!-- Rotary Encoder Simulator -->
+        <div class="flex items-center gap-3">
+          <button onclick="handleEncoderRotate(-1)" title="Rotate Counter-Clockwise" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-slate-700 active:scale-95 flex items-center justify-center font-bold text-cyan-300 font-mono border border-slate-700 shadow">
+            ◀
+          </button>
+
+          <!-- Knob -->
+          <button onclick="handleBtnEncClick()" class="w-14 h-14 rounded-full bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 border-2 border-slate-600 shadow-xl flex items-center justify-center active:scale-95 cursor-pointer relative group">
+            <div id="encoder-knob-notch" class="w-2 h-2 rounded-full bg-cyan-400 absolute top-1.5 transition-transform duration-100"></div>
+            <span class="text-[9px] font-mono text-slate-400 group-hover:text-cyan-300 font-bold">CLICK</span>
+          </button>
+
+          <button onclick="handleEncoderRotate(1)" title="Rotate Clockwise" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-slate-700 active:scale-95 flex items-center justify-center font-bold text-cyan-300 font-mono border border-slate-700 shadow">
+            ▶
+          </button>
+        </div>
+
+        <!-- Pushbutton RUN (SELECT) -->
+        <button onclick="handleBtnRun()" class="w-24 py-2 bg-emerald-950/80 hover:bg-emerald-900 text-emerald-200 border border-emerald-700 rounded-lg font-mono text-xs font-bold active:scale-95 shadow transition-all">
+          [ RUN ]
+        </button>
+      </div>
+
+      <div class="text-[11px] text-slate-300 mt-2 bg-slate-900 p-2 rounded border border-slate-800 text-center">
+        <span class="text-amber-400 font-bold">100% STANDALONE DA BANCO:</span> Tutte le funzioni si controllano unicamente con la <span class="text-cyan-300 font-bold">Manopola Encoder</span> (gira + clicca) e i due tasti <span class="text-emerald-300 font-bold">[RUN]</span> e <span class="text-rose-300 font-bold">[BACK]</span>. <span class="text-slate-400">Nessuna tastiera necessaria!</span>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN: Drive Physics Telemetry & Fault Injection Matrix -->
+    <div class="lg:col-span-5 flex flex-col gap-4">
+
+      <!-- Virtual Drive Physics Telemetry -->
+      <div class="bg-slate-900 rounded-xl p-4 border border-slate-800 shadow-lg text-xs">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-1.5 mb-2.5">
+          <span class="font-bold text-cyan-400 uppercase tracking-wide">Telemetria Meccanica Virtuale</span>
+          <span id="telemetry-model-tag" class="font-mono text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-amber-300">Chinon FB-354</span>
+        </div>
+
+        <div class="space-y-2">
+          <!-- RPM & Motor -->
+          <div class="flex justify-between items-center">
+            <span class="text-slate-400">Stato Mandrino:</span>
+            <span id="phys-motor-state" class="font-mono font-bold text-slate-400">FERMO (0 RPM)</span>
+          </div>
+          <!-- Stepper Head Position -->
+          <div>
+            <div class="flex justify-between items-center text-slate-400 mb-0.5">
+              <span>Posizione Testine:</span>
+              <span id="phys-head-track" class="font-mono text-cyan-300 font-bold">Traccia 00 / 79</span>
+            </div>
+            <div class="w-full bg-slate-950 h-2 rounded overflow-hidden border border-slate-800">
+              <div id="phys-head-bar" class="h-full bg-cyan-500 w-[0%] transition-all duration-75"></div>
+            </div>
+          </div>
+          <!-- Power Shunt Absorptions -->
+          <div class="grid grid-cols-3 gap-2 pt-1 border-t border-slate-800/80 text-[11px] font-mono">
+            <div>+5V: <span id="tele-5v" class="text-green-400 font-bold">120mA</span></div>
+            <div>+12V: <span id="tele-12v" class="text-green-400 font-bold">0mA</span></div>
+            <div>+24V: <span id="tele-24v" class="text-slate-400 font-bold">0mA</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fault Injection Engine (Iniezione Guasti per Test Riparazione) -->
+      <div class="bg-slate-900 rounded-xl p-4 border border-slate-800 shadow-lg text-xs flex-1">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-1.5 mb-2">
+          <span class="font-bold text-amber-400 uppercase tracking-wide">Iniezione Guasto (Stress Test)</span>
+          <span class="text-[10px] text-slate-400">Simulatore OEM</span>
+        </div>
+
+        <p class="text-[11px] text-slate-400 mb-2">
+          Seleziona un'anomalia per verificare come l'algoritmo diagnostico individua il problema e genera il referto di riparazione:
+        </p>
+
+        <div class="space-y-1.5">
+          <button onclick="injectFault('none')" id="fault-none" class="w-full text-left p-1.5 rounded bg-emerald-950/60 border border-emerald-600 text-emerald-300 font-mono text-[11px] flex justify-between">
+            <span>✓ Nessun Guasto (Drive OEM Perfetto)</span>
+            <span class="text-[10px] text-emerald-400 font-bold">PASS</span>
+          </button>
+          <button onclick="injectFault('chinon_caps')" id="fault-chinon" class="w-full text-left p-1.5 rounded bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 font-mono text-[11px] flex justify-between">
+            <span>⚡ Amiga: Condensatori SMD in Perdita</span>
+            <span class="text-[10px] text-rose-400 font-bold">MTR STALL</span>
+          </button>
+          <button onclick="injectFault('amiga_pin34')" id="fault-pin34" class="w-full text-left p-1.5 rounded bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 font-mono text-[11px] flex justify-between">
+            <span>⚡ Drive PC su Amiga: Manca READY Pin 34</span>
+            <span class="text-[10px] text-amber-400 font-bold">NO RDY</span>
+          </button>
+          <button onclick="injectFault('tandon_speed')" id="fault-tandon" class="w-full text-left p-1.5 rounded bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 font-mono text-[11px] flex justify-between">
+            <span>⚡ Tandon TM100: Trimmer R4 Fuori Giri</span>
+            <span class="text-[10px] text-amber-400 font-bold">324 RPM</span>
+          </button>
+          <button onclick="injectFault('track0_blind')" id="fault-trk0" class="w-full text-left p-1.5 rounded bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 font-mono text-[11px] flex justify-between">
+            <span>⚡ Sensore Traccia 00 Ottico Cieco/Sporco</span>
+            <span class="text-[10px] text-rose-400 font-bold">TRK0 FAIL</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- BOTTOM SECTION: Virtual Serial CLI (115200 Baud Console Mirror) -->
+  <div class="max-w-5xl w-full mt-4 bg-slate-900 rounded-xl p-4 border border-slate-800 shadow-xl">
+    <div class="flex justify-between items-center border-b border-slate-800 pb-2 mb-2">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span>
+        <span class="font-mono text-xs font-bold text-slate-300">PORTA SERIALE USB/UART AUSILIARIA (OPZIONALE PER COLLEGAMENTO A PC)</span>
+      </div>
+      <span class="text-[10px] text-slate-400 font-mono">115200 8N1 — Mirror Telemetria</span>
+    </div>
+    <div class="text-[11px] text-slate-400 mb-2 italic">
+      Nota di laboratorio: Sul banco di lavoro il tester opera in totale autonomia con display e manopola. Questa porta seriale serve solo se desideri registrare i log su PC o inviare comandi remoti.
+    </div>
+
+    <!-- Terminal Output Area -->
+    <div id="cli-log" class="cli-terminal h-36 p-2 rounded text-[11px] text-slate-300 overflow-y-auto whitespace-pre-wrap border border-slate-800 mb-2 select-text"></div>
+
+    <!-- Terminal Input Prompt -->
+    <form onsubmit="handleCliSubmit(event)" class="flex gap-2">
+      <span class="font-mono text-xs text-cyan-400 py-1">FDD-Tester&gt;</span>
+      <input type="text" id="cli-input" placeholder="Comandi: help, status, pwr all on, motor on, rpm, seek 40, diag amiga" class="flex-1 bg-slate-950 border border-slate-700 rounded px-2 py-1 text-xs font-mono text-slate-100 focus:outline-none focus:border-cyan-400">
+      <button type="submit" class="px-4 py-1 bg-cyan-900 hover:bg-cyan-800 text-cyan-200 rounded font-mono text-xs font-bold">Invia</button>
+    </form>
+  </div>
+
+  <!-- SCRIPT: Complete Firmware Simulation Engine in JavaScript -->
+  <script>
+    // Canvas & Context (160x80 pixels)
+    const canvas = document.getElementById('lcd');
+    const ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = false;
+
+    // Web Audio Synthesizer for Piezo Buzzer & Floppy Sound
+    let audioCtx = null;
+    let audioEnabled = true;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function toggleAudio() {
+      audioEnabled = !audioEnabled;
+      document.getElementById('audio-state').innerText = audioEnabled ? 'ON' : 'OFF';
+      document.getElementById('audio-state').className = audioEnabled ? 'text-cyan-400' : 'text-slate-500';
+    }
+
+    function playBeep(freq = 2000, durationMs = 80, type = 'square') {
+      if (!audioEnabled) return;
+      initAudio();
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + (durationMs / 1000));
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + (durationMs / 1000));
+      } catch (e) {}
+    }
+
+    function playSeekTick(inward = true) {
+      playBeep(inward ? 2800 : 2200, 15, 'triangle');
+    }
+
+    // =========================================================================
+    // Models Database (Synced with fdd_diagnostics.c)
+    // =========================================================================
+    const OEM_MODELS = [
+      { id: 0, name: "Generic 3.5\" HD 1.44M", size: "3.5\"", rpm: 300, tol: 1.0, tracks: 80, rate: 3, manual: "Standard PC/AT" },
+      { id: 1, name: "Sony MPF-920 (1.44M BLDC)", size: "3.5\"", rpm: 300, tol: 1.0, tracks: 80, rate: 3, manual: "archive.org/MPF920" },
+      { id: 2, name: "TEAC FD-235HF (1.44M/720K)", size: "3.5\"", rpm: 300, tol: 1.0, tracks: 80, rate: 3, manual: "hxc2001.com/FD235HF" },
+      { id: 3, name: "Chinon FB-354 (Amiga DD)", size: "3.5\"", rpm: 300, tol: 1.0, tracks: 80, rate: 3, manual: "retro-commodore.eu" },
+      { id: 4, name: "Chinon FB-357A (Amiga HD)", size: "3.5\"", rpm: 150, tol: 1.0, tracks: 80, rate: 3, manual: "retro-commodore.eu" },
+      { id: 5, name: "Atari ST (Epson SMD-380)", size: "3.5\"", rpm: 300, tol: 1.0, tracks: 80, rate: 3, manual: "dev-docs.org" },
+      { id: 6, name: "TEAC FD-235HG (3-Mode 1.2M)", size: "3.5\"", rpm: 360, tol: 1.0, tracks: 80, rate: 3, manual: "hxc2001.com/FD235HG" },
+      { id: 7, name: "Mac SuperDrive (Sony MP-F75W)", size: "3.5\"", rpm: 300, tol: 1.5, tracks: 80, rate: 3, manual: "bitsavers.org/apple/disk" },
+      { id: 8, name: "Tandon TM100-2A (5.25\" 360K)", size: "5.25\"", rpm: 300, tol: 1.5, tracks: 40, rate: 6, manual: "archive.org/TM100" },
+      { id: 9, name: "TEAC FD-55GFR (5.25\" 1.2M)", size: "5.25\"", rpm: 360, tol: 1.0, tracks: 80, rate: 3, manual: "deramp.com/TEAC" },
+      { id: 10, name: "Shugart SA400 Minifloppy", size: "5.25\"", rpm: 300, tol: 2.0, tracks: 35, rate: 20, manual: "deramp.com/SA400" },
+      { id: 11, name: "Shugart SA800 8\" (AC Motor)", size: "8\"", rpm: 360, tol: 1.0, tracks: 77, rate: 8, manual: "bitsavers.org/SA800" },
+      { id: 12, name: "Shugart SA850 8\" (AC Motor)", size: "8\"", rpm: 360, tol: 1.0, tracks: 77, rate: 8, manual: "bitsavers.org/SA850" },
+      { id: 13, name: "Matsushita EME-156 (3\" CPC)", size: "3\"", rpm: 300, tol: 1.5, tracks: 40, rate: 12, manual: "archive.org/Amstrad" },
+      { id: 14, name: "Apple II Disk II (4-Phase)", size: "5.25\"", rpm: 300, tol: 1.5, tracks: 35, rate: 20, manual: "archive.org/DiskII" },
+      { id: 15, name: "Commodore 1541 Mechanics", size: "5.25\"", rpm: 300, tol: 1.5, tracks: 40, rate: 20, manual: "zimmers.net/1541" }
+    ];
+
+    // =========================================================================
+    // Firmware State Machine Variables
+    // =========================================================================
+    let uiState = 'BOOT'; // BOOT, MODEL_SELECT, TACHO, SEEK, CAT_EYE, DIAG_PROGRESS, DIAG_REPORT, REPAIR_ADVISOR
+    let selectedModelIdx = 3; // Default: Chinon FB-354 Amiga
+    let encoderKnobAngle = 0;
+
+    // Physical Virtual Drive State
+    let physMotorOn = false;
+    let physCurRpm = 0.0;
+    let physTargetRpm = 300.0;
+    let physCurTrack = 0;
+    let physMaxTrack = 80;
+    let physHeadSide = 0;
+    let physStepLoss = 0;
+    let physIndexPulse = false;
+    let physCurrent5V = 120.0;
+    let physCurrent12V = 0.0;
+
+    // Active Fault Injection
+    let activeFault = 'none';
+
+    // Diagnostic Suite Engine Variables
+    let diagProgress = 0;
+    let diagStageName = "";
+    let diagTimer = null;
+    let lastReport = null;
+
+    // =========================================================================
+    // 5x7 Font Rendering on Canvas
+    // =========================================================================
+    const FONT_5X7 = {
+      '0':[0x3E,0x51,0x49,0x45,0x3E], '1':[0x00,0x42,0x7F,0x40,0x00],
+      '2':[0x42,0x61,0x51,0x49,0x46], '3':[0x21,0x41,0x45,0x4B,0x31],
+      '4':[0x18,0x14,0x12,0x7F,0x10], '5':[0x27,0x45,0x45,0x45,0x39],
+      '6':[0x3C,0x4A,0x49,0x49,0x30], '7':[0x01,0x71,0x09,0x05,0x03],
+      '8':[0x36,0x49,0x49,0x49,0x36], '9':[0x06,0x49,0x49,0x29,0x1E],
+      'A':[0x7E,0x11,0x11,0x11,0x7E], 'B':[0x7F,0x49,0x49,0x49,0x36],
+      'C':[0x3E,0x41,0x41,0x41,0x22], 'D':[0x7F,0x41,0x41,0x22,0x1C],
+      'E':[0x7F,0x49,0x49,0x49,0x41], 'F':[0x7F,0x09,0x09,0x09,0x01],
+      'G':[0x3E,0x41,0x49,0x49,0x7A], 'H':[0x7F,0x08,0x08,0x08,0x7F],
+      'I':[0x00,0x41,0x7F,0x41,0x00], 'J':[0x20,0x40,0x41,0x3F,0x01],
+      'K':[0x7F,0x08,0x14,0x22,0x41], 'L':[0x7F,0x40,0x40,0x40,0x40],
+      'M':[0x7F,0x02,0x0C,0x02,0x7F], 'N':[0x7F,0x04,0x08,0x10,0x7F],
+      'O':[0x3E,0x41,0x41,0x41,0x3E], 'P':[0x7F,0x09,0x09,0x09,0x06],
+      'Q':[0x3E,0x41,0x51,0x21,0x5E], 'R':[0x7F,0x09,0x19,0x29,0x46],
+      'S':[0x46,0x49,0x49,0x49,0x31], 'T':[0x01,0x01,0x7F,0x01,0x01],
+      'U':[0x3F,0x40,0x40,0x40,0x3F], 'V':[0x1F,0x20,0x40,0x20,0x1F],
+      'W':[0x3F,0x40,0x38,0x40,0x3F], 'X':[0x63,0x14,0x08,0x14,0x63],
+      'Y':[0x07,0x08,0x70,0x08,0x07], 'Z':[0x61,0x51,0x49,0x45,0x43],
+      ' ':[0,0,0,0,0], ':':[0,0x24,0,0,0], '.':[0,0,0x40,0,0], '-': [0x08,0x08,0x08,0,0],
+      '+':[0x08,0x1C,0x08,0,0], '/': [0x20,0x10,0x08,0x04,0x02], '[': [0,0x7F,0x41,0,0],
+      ']':[0,0x41,0x7F,0,0], '%': [0x62,0x64,0x08,0x13,0x23], '"': [0x03,0,0x03,0,0],
+      '(': [0,0x3E,0x41,0,0], ')': [0,0x41,0x3E,0,0], '?': [0x02,0x01,0x51,0x09,0x06],
+      '!':[0,0,0x5F,0,0], '=':[0,0x14,0x14,0x14,0]
+    };
+
+    function drawChar(x, y, char, color) {
+      const c = char.toUpperCase();
+      const glyph = FONT_5X7[c] || FONT_5X7['?'];
+      ctx.fillStyle = color;
+      for (let col = 0; col < 5; col++) {
+        const bits = glyph[col];
+        for (let row = 0; row < 7; row++) {
+          if (bits & (1 << row)) {
+            ctx.fillRect(x + col, y + row, 1, 1);
+          }
+        }
+      }
+    }
+
+    function drawText(x, y, str, color) {
+      let curX = x;
+      for (let i = 0; i < str.length; i++) {
+        drawChar(curX, y, str[i], color);
+        curX += 6;
+      }
+    }
+
+    function drawLargeDigit(x, y, digit, color) {
+      if (digit === '.') {
+        ctx.fillStyle = color;
+        ctx.fillRect(x + 2, y + 10, 2, 2);
+        return;
+      }
+      const glyph = FONT_5X7[digit] || FONT_5X7['0'];
+      ctx.fillStyle = color;
+      for (let col = 0; col < 5; col++) {
+        const bits = glyph[col];
+        for (let row = 0; row < 7; row++) {
+          if (bits & (1 << row)) {
+            ctx.fillRect(x + col * 2, y + row * 2, 2, 2);
+          }
+        }
+      }
+    }
+
+    // Colors matching display_ui.h
+    const C = {
+      BG: '#060a12', PANEL: '#0e1624', GRID: '#23344e',
+      WHITE: '#f0f6ff', MUTED: '#8296af', CYAN: '#00e4ff',
+      BLUE: '#0f6eff', AMBER: '#ffb900', ORANGE: '#ff5f00',
+      GREEN: '#00e676', RED: '#ff2d41'
+    };
+
+    // =========================================================================
+    // 8 Screen Renderers
+    // =========================================================================
+    function renderScreen() {
+      ctx.fillStyle = C.BG;
+      ctx.fillRect(0, 0, 160, 80);
+
+      const m = OEM_MODELS[selectedModelIdx];
+      document.getElementById('state-indicator').innerText = uiState;
+      document.getElementById('telemetry-model-tag').innerText = m.name;
+
+      switch(uiState) {
+        case 'BOOT':
+          ctx.fillStyle = C.BLUE;
+          ctx.fillRect(0, 0, 160, 11);
+          drawText(4, 2, "RETRO-DIAG FDD TESTER", C.WHITE);
+          drawText(120, 2, "v1.0", C.CYAN);
+
+          drawText(6, 16, "MCU Core: STM32F407 168M", C.WHITE);
+          drawText(140, 16, "OK", C.GREEN);
+          drawText(6, 26, "Active E-Fuses (24/12/5V)", C.WHITE);
+          drawText(134, 26, "ARM", C.GREEN);
+          drawText(6, 36, "Shunt INA180 (0.8mA/LSB)", C.WHITE);
+          drawText(140, 36, "OK", C.GREEN);
+          drawText(6, 46, "Tachometer TIM4 (1MHz)", C.WHITE);
+          drawText(134, 46, "RDY", C.GREEN);
+          drawText(6, 56, "ULN2003 4-Phase Stepper", C.WHITE);
+          drawText(140, 56, "OK", C.GREEN);
+
+          ctx.fillStyle = C.PANEL;
+          ctx.fillRect(0, 68, 160, 12);
+          drawText(4, 70, "PREMI RUN PER INIZIARE", C.CYAN);
+          break;
+
+        case 'MODEL_SELECT':
+          ctx.fillStyle = C.BLUE;
+          ctx.fillRect(0, 0, 160, 11);
+          drawText(4, 2, `MODELLO: [${selectedModelIdx + 1}/${OEM_MODELS.length}]`, C.WHITE);
+          drawText(134, 2, m.size, C.AMBER);
+
+          drawText(4, 18, m.name.substring(0, 25), C.AMBER);
+
+          ctx.strokeStyle = C.GRID;
+          ctx.strokeRect(4, 30, 152, 26);
+          drawText(8, 33, `TARGET : ${m.rpm} RPM (+/-${m.tol}%)`, C.WHITE);
+          drawText(8, 44, `TRACCE : ${m.tracks} | STEP: ${m.rate}ms`, C.CYAN);
+
+          ctx.fillStyle = C.PANEL;
+          ctx.fillRect(0, 68, 160, 12);
+          drawText(4, 70, "[ENC]:SCORRI [RUN]:TEST", C.MUTED);
+          break;
+
+        case 'TACHO':
+          ctx.fillStyle = C.BLUE;
+          ctx.fillRect(0, 0, 160, 11);
+          drawText(4, 2, "TACOMETRO MANDRINO LIVE", C.WHITE);
+          if (physIndexPulse) {
+            ctx.fillStyle = C.CYAN;
+            ctx.fillRect(144, 2, 12, 7);
+            drawText(145, 2, "ID", C.BG);
+          }
+
+          // Large RPM
+          const sRpm = physCurRpm.toFixed(1).padStart(5, ' ');
+          let xP = 6;
+          for (let i = 0; i < sRpm.length; i++) {
+            if (sRpm[i] === '.') {
+              drawLargeDigit(xP, 16, '.', C.CYAN);
+              xP += 6;
+            } else {
+              drawLargeDigit(xP, 16, sRpm[i], C.CYAN);
+              xP += 12;
+            }
+          }
+          drawText(xP + 4, 22, "RPM", C.MUTED);
+
+          const wf = (physCurRpm > 50) ? (0.12 + Math.random() * 0.05).toFixed(2) : "0.00";
+          drawText(102, 16, `W&F:${wf}%`, C.GREEN);
+          drawText(102, 26, `TGT:${m.rpm}`, C.WHITE);
+
+          // Deviation Bar
+          ctx.fillStyle = C.PANEL;
+          ctx.fillRect(4, 38, 152, 8);
+          ctx.strokeStyle = C.GRID;
+          ctx.strokeRect(4, 38, 152, 8);
+          ctx.fillStyle = C.GREEN;
+          ctx.fillRect(80 - 10, 39, 20, 6);
+          ctx.fillStyle = C.WHITE;
+          ctx.fillRect(80, 38, 1, 8);
+
+          const devPct = (physCurRpm > 0) ? ((physCurRpm - m.rpm) / m.rpm) * 100 : 0;
+          let needleOff = Math.round(devPct * 30);
+          needleOff = Math.max(-60, Math.min(60, needleOff));
+          ctx.fillStyle = (Math.abs(devPct) <= m.tol) ? C.CYAN : C.AMBER;
+          ctx.fillRect(80 + needleOff - 1, 38, 3, 8);
+
+          drawText(6, 52, `+5V:${physCurrent5V.toFixed(0)}mA +12V:${physCurrent12V.toFixed(0)}mA`, C.MUTED);
+
+          ctx.fillStyle = C.PANEL;
+          ctx.fillRect(0, 68, 160, 12);
+          drawText(4, 70, `[RUN]:${physMotorOn ? 'STOP MTR' : 'START MTR'} [BACK]:MENU`, C.CYAN);
+          break;
+
+        case 'SEEK':
+          ctx.fillStyle = C.BLUE;
+          ctx.fillRect(0, 0, 160, 11);
+          drawText(4, 2, "CARRELLO STEPPER & SENSORI", C.WHITE);
+
+          drawLargeDigit(6, 16, String(Math.floor(physCurTrack / 10)), C.CYAN);
+          drawLargeDigit(18, 16, String(physCurTrack % 10), C.CYAN);
+          drawText(32, 22, `/ ${m.tracks - 1} MAX`, C.MUTED);
+
+          // Sensor badges
+          const isTrk0 = (physCurTrack === 0) && (activeFault !== 'track0_blind');
+          ctx.fillStyle = isTrk0 ? C.GREEN : C.GRID;
+          ctx.fillRect(95, 14, 28, 9);
+          drawText(97, 15, "TRK0", isTrk0 ? C.BG : C.MUTED);
+
+          ctx.fillStyle = C.AMBER;
+          ctx.fillRect(128, 14, 26, 9);
+          drawText(131, 15, "WP", C.BG);
+
+          const isRdy = (physCurRpm > (m.rpm * 0.95)) && (activeFault !== 'amiga_pin34');
+          ctx.fillStyle = isRdy ? C.GREEN : C.GRID;
+          ctx.fillRect(95, 26, 28, 9);
+          drawText(97, 27, "RDY", isRdy ? C.BG : C.MUTED);
+
+          ctx.fillStyle = physIndexPulse ? C.CYAN : C.GRID;
+          ctx.fillRect(128, 26, 26, 9);
+          drawText(131, 27, "IDX", physIndexPulse ? C.BG : C.MUTED);
+
+          // Position Bar
+          ctx.fillStyle = C.PANEL;
+          ctx.fillRect(4, 42, 152, 8);
+          ctx.strokeStyle = C.GRID;
+          ctx.strokeRect(4, 42, 152, 8);
+          const barPos = 6 + Math.round((144 * physCurTrack) / (m.tracks - 1));
+          ctx.fillStyle = C.CYAN;
+          ctx.fillRect(barPos, 43, 4, 6);
+
+          drawText(6, 54, `PERDITA PASSI: ${physStepLoss}`, (physStepLoss === 0) ? C.GREEN : C.RED);
+
+          ctx.fillStyle = C.PANEL;
+          ctx.fillRect(0, 68, 160, 12);
+          drawText(4, 70, "[ENC]:SEEK [RUN]:BURN-IN", C.MUTED);
+          break;
+
+        case 'CAT_EYE':
+          ctx.fillStyle = C.ORANGE;
+          ctx.fillRect(0, 0, 160, 11);
+          drawText(4, 2, "DYSAN 224/2A (TRACCIA 40)", C.WHITE);
+
+          drawText(6, 16, "LOBO A: 420mV", C.CYAN);
+          drawText(84, 16, "LOBO B: 388mV", C.CYAN);
+
+          ctx.fillStyle = C.PANEL;
+          ctx.fillRect(6, 26, 68, 6);
+          ctx.fillStyle = C.CYAN;
+          ctx.fillRect(6, 26, 56, 6);
+
+          ctx.fillStyle = C.PANEL;
+          ctx.fillRect(84, 26, 68, 6);
+          ctx.fillStyle = C.AMBER;
+          ctx.fillRect(84, 26, 52, 6);
+
+          drawText(6, 38, "SIMMETRIA: 92.4%", C.GREEN);
+          drawText(6, 50, `LATO TESTINA: ${physHeadSide} (AZIMUTH +2')`, C.WHITE);
+
+          ctx.fillStyle = C.PANEL;
+          ctx.fillRect(0, 68, 160, 12);
+          drawText(4, 70, "[ENC]:LATO 0/1 [BACK]:ESCI", C.MUTED);
+          break;
+
+        case 'DIAG_PROGRESS':
+          ctx.fillStyle = C.BLUE;
+          ctx.fillRect(0, 0, 160, 11);
+          drawText(4, 2, "COLLAUDO AUTOMATICO", C.WHITE);
+          drawText(132, 2, `${diagProgress}%`, C.AMBER);
+
+          drawText(6, 18, diagStageName, C.CYAN);
+
+          ctx.fillStyle = C.PANEL;
+          ctx.fillRect(4, 32, 152, 12);
+          ctx.strokeStyle = C.GRID;
+          ctx.strokeRect(4, 32, 152, 12);
+          ctx.fillStyle = C.GREEN;
+          ctx.fillRect(6, 34, Math.round((148 * diagProgress) / 100), 8);
+
+          drawText(6, 50, `+12V: ${physCurrent12V.toFixed(0)}mA | E-Fuse: OK`, C.MUTED);
+
+          ctx.fillStyle = C.PANEL;
+          ctx.fillRect(0, 68, 160, 12);
+          drawText(4, 70, "[BACK]:ANNULLA COLLAUDO", C.RED);
+          break;
+
+        case 'DIAG_REPORT':
+          if (!lastReport) break;
+          ctx.fillStyle = (lastReport.overall === 'PASS') ? C.GREEN : ((lastReport.overall === 'WARN') ? C.AMBER : C.RED);
+          ctx.fillRect(0, 0, 160, 11);
+          drawText(4, 2, `ESITO: ${lastReport.overall} (${lastReport.errors} ERR)`, C.BG);
+
+          let yR = 16;
+          for (let i = 0; i < lastReport.subtests.length && i < 4; i++) {
+            const t = lastReport.subtests[i];
+            const col = (t.res === 'P') ? C.GREEN : ((t.res === 'W') ? C.AMBER : C.RED);
+            drawText(4, yR, `[${t.res}] ${t.name.substring(0, 20)}`, col);
+            yR += 11;
+          }
+
+          drawText(96, 56, `ERR:${lastReport.errors} WRN:${lastReport.warns}`, (lastReport.errors > 0) ? C.RED : C.GREEN);
+
+          ctx.fillStyle = C.PANEL;
+          ctx.fillRect(0, 68, 160, 12);
+          drawText(4, 70, "[RUN]:GUIDA RIPARAZIONE", C.CYAN);
+          break;
+
+        case 'REPAIR_ADVISOR':
+          ctx.fillStyle = C.AMBER;
+          ctx.fillRect(0, 0, 160, 11);
+          drawText(4, 2, `GUIDA RIPARAZIONE: ${m.size}`, C.BG);
+
+          drawText(4, 15, m.name.substring(0, 25), C.AMBER);
+
+          let advice = "Drive in piena conformita alle specifiche di fabbrica OEM.";
+          if (activeFault === 'chinon_caps') {
+            advice = "RECAP SMD: C1 22uF 16V, C2 1uF 50V, C3 100uF. Rimuovere elettrolita acido.";
+          } else if (activeFault === 'amiga_pin34') {
+            advice = "PIN 34 MANCA READY: Il drive emette Disk Change PC! Impostare jumper RDY/DC.";
+          } else if (activeFault === 'tandon_speed') {
+            advice = "TARATURA R4: Regolare il trimmer R4 sul servo motore fino a 300.0 RPM esatti.";
+          } else if (activeFault === 'track0_blind') {
+            advice = "SENSORE TRK00: Pulire forcella ottica con alcool isopropilico e registrare vite.";
+          }
+
+          drawText(4, 28, advice.substring(0, 26), C.WHITE);
+          drawText(4, 40, advice.substring(26, 52), C.CYAN);
+          drawText(4, 52, advice.substring(52, 78), C.MUTED);
+
+          ctx.fillStyle = C.PANEL;
+          ctx.fillRect(0, 68, 160, 12);
+          drawText(4, 70, "[BACK]:MENU PRINCIPALE", C.MUTED);
+          break;
+      }
+
+      // Update hardware LED states
+      updateHardwareLeds();
+    }
+
+    function updateHardwareLeds() {
+      const ledReady = document.getElementById('led-ready');
+      const ledBusy = document.getElementById('led-busy');
+      const ledFault = document.getElementById('led-fault');
+      const ledIndex = document.getElementById('led-index');
+      const ledRead = document.getElementById('led-read');
+
+      const isReady = (uiState !== 'DIAG_PROGRESS') && (!lastReport || lastReport.overall === 'PASS');
+      const isBusy = (uiState === 'DIAG_PROGRESS') || physMotorOn;
+      const isFault = (lastReport && lastReport.overall === 'FAIL') || (activeFault !== 'none' && physMotorOn);
+
+      ledReady.className = `w-2.5 h-2.5 rounded-full ${isReady ? 'bg-green-500 shadow-[0_0_8px_#22c55e]' : 'bg-green-950 border border-green-800'}`;
+      ledBusy.className = `w-2.5 h-2.5 rounded-full ${isBusy ? 'bg-amber-500 shadow-[0_0_8px_#f59e0b]' : 'bg-amber-950 border border-amber-800'}`;
+      ledFault.className = `w-2.5 h-2.5 rounded-full ${isFault ? 'bg-red-500 shadow-[0_0_8px_#ef4444]' : 'bg-red-950 border border-red-800'}`;
+      ledIndex.className = `w-2.5 h-2.5 rounded-full ${physIndexPulse ? 'bg-blue-500 shadow-[0_0_8px_#3b82f6]' : 'bg-blue-950 border border-blue-800'}`;
+      ledRead.className = `w-2.5 h-2.5 rounded-full ${physCurRpm > 100 ? 'bg-cyan-400 shadow-[0_0_8px_#06b6d4]' : 'bg-cyan-950 border border-cyan-800'}`;
+
+      // Update right-column telemetry labels
+      document.getElementById('phys-motor-state').innerText = physMotorOn ? `ROTAZIONE (${physCurRpm.toFixed(1)} RPM)` : 'FERMO (0 RPM)';
+      document.getElementById('phys-motor-state').className = physMotorOn ? 'font-mono font-bold text-green-400' : 'font-mono font-bold text-slate-400';
+      document.getElementById('phys-head-track').innerText = `Traccia ${String(physCurTrack).padStart(2, '0')} / ${OEM_MODELS[selectedModelIdx].tracks - 1}`;
+      document.getElementById('phys-head-bar').style.width = `${(physCurTrack / (OEM_MODELS[selectedModelIdx].tracks - 1)) * 100}%`;
+      document.getElementById('tele-5v').innerText = `${physCurrent5V.toFixed(0)}mA`;
+      document.getElementById('tele-12v').innerText = `${physCurrent12V.toFixed(0)}mA`;
+    }
+
+    // =========================================================================
+    // Virtual Drive Physics Engine (Motor dynamics, inertia, index pulses)
+    // =========================================================================
+    setInterval(() => {
+      const m = OEM_MODELS[selectedModelIdx];
+      let targetSpeed = 0;
+
+      if (physMotorOn) {
+        if (activeFault === 'chinon_caps') {
+          targetSpeed = 42.0; // Stalled motor due to leaky capacitors
+          physCurrent12V = 480.0; // High current draw
+        } else if (activeFault === 'tandon_speed') {
+          targetSpeed = 324.5; // Detuned R4 trimmer
+          physCurrent12V = 210.0;
+        } else {
+          targetSpeed = m.rpm;
+          physCurrent12V = 180.0;
+        }
+        physCurrent5V = 160.0;
+      } else {
+        physCurrent12V = 0.0;
+        physCurrent5V = 95.0;
+      }
+
+      // Smooth inertia ramp
+      physCurRpm += (targetSpeed - physCurRpm) * 0.15;
+      if (physCurRpm < 0.5) physCurRpm = 0.0;
+
+      // Index pulses when spinning
+      if (physCurRpm > 100) {
+        const pulseIntervalMs = 60000 / physCurRpm;
+        physIndexPulse = (Date.now() % Math.round(pulseIntervalMs)) < 15;
+      } else {
+        physIndexPulse = false;
+      }
+
+      renderScreen();
+    }, 30); // ~33 FPS
+
+    // =========================================================================
+    // Physical Button Handlers
+    // =========================================================================
+    function handleEncoderRotate(delta) {
+      encoderKnobAngle = (encoderKnobAngle + delta * 30) % 360;
+      document.getElementById('encoder-knob-notch').style.transform = `rotate(${encoderKnobAngle}deg)`;
+
+      if (uiState === 'MODEL_SELECT') {
+        selectedModelIdx = (selectedModelIdx + delta + OEM_MODELS.length) % OEM_MODELS.length;
+        playBeep(2500, 15);
+      } else if (uiState === 'SEEK') {
+        const m = OEM_MODELS[selectedModelIdx];
+        if (delta > 0 && physCurTrack < (m.tracks - 1)) {
+          physCurTrack++;
+          playSeekTick(true);
+        } else if (delta < 0 && physCurTrack > 0) {
+          physCurTrack--;
+          playSeekTick(false);
+        }
+      } else if (uiState === 'CAT_EYE') {
+        physHeadSide = 1 - physHeadSide;
+        playBeep(2200, 20);
+      }
+      renderScreen();
+    }
+
+    function handleBtnEncClick() {
+      playBeep(1800, 40);
+      if (uiState === 'MODEL_SELECT') {
+        uiState = 'TACHO';
+      } else if (uiState === 'TACHO') {
+        uiState = 'SEEK';
+      } else if (uiState === 'SEEK') {
+        uiState = 'CAT_EYE';
+      } else if (uiState === 'CAT_EYE') {
+        uiState = 'MODEL_SELECT';
+      }
+      renderScreen();
+    }
+
+    function handleBtnRun() {
+      playBeep(2200, 60);
+
+      if (uiState === 'BOOT') {
+        uiState = 'MODEL_SELECT';
+      } else if (uiState === 'MODEL_SELECT') {
+        startDiagnosticSuite();
+      } else if (uiState === 'TACHO') {
+        physMotorOn = !physMotorOn;
+      } else if (uiState === 'SEEK') {
+        // Burn-in seek cycle
+        runBurnInSeek();
+      } else if (uiState === 'DIAG_REPORT') {
+        uiState = 'REPAIR_ADVISOR';
+      } else if (uiState === 'REPAIR_ADVISOR') {
+        uiState = 'MODEL_SELECT';
+      }
+      renderScreen();
+    }
+
+    function handleBtnBack() {
+      playBeep(1200, 70);
+
+      if (uiState === 'DIAG_PROGRESS') {
+        clearInterval(diagTimer);
+        physMotorOn = false;
+        uiState = 'MODEL_SELECT';
+      } else if (uiState === 'TACHO') {
+        physMotorOn = false;
+        uiState = 'MODEL_SELECT';
+      } else if (uiState === 'SEEK' || uiState === 'CAT_EYE' || uiState === 'DIAG_REPORT' || uiState === 'REPAIR_ADVISOR') {
+        physMotorOn = false;
+        uiState = 'MODEL_SELECT';
+      }
+      renderScreen();
+    }
+
+    // Burn-in Seek Cycle
+    function runBurnInSeek() {
+      const m = OEM_MODELS[selectedModelIdx];
+      let step = 0;
+      const target = Math.min(40, m.tracks - 1);
+      const interval = setInterval(() => {
+        if (step < target) {
+          physCurTrack = step;
+          playSeekTick(true);
+          step += 4;
+        } else {
+          physCurTrack = 0;
+          playSeekTick(false);
+          clearInterval(interval);
+        }
+      }, 40);
+    }
+
+    // =========================================================================
+    // Automated 5-Stage Diagnostic Suite Engine
+    // =========================================================================
+    function startDiagnosticSuite() {
+      uiState = 'DIAG_PROGRESS';
+      diagProgress = 0;
+      diagStageName = "Stage 1: Sicurezza E-Fuse & Shunt...";
+      physMotorOn = true;
+
+      const m = OEM_MODELS[selectedModelIdx];
+      cliPrint(`\r\n>> Avvio Collaudo Automatico per: ${m.name}`);
+      cliPrint("   Stage 1: Verifica rail di potenza e corto circuiti...");
+
+      diagTimer = setInterval(() => {
+        diagProgress += 20;
+
+        if (diagProgress === 40) {
+          diagStageName = "Stage 2: Tachimetro Mandrino & W&F...";
+          cliPrint("   Stage 2: Misurazione velocita di rotazione e stabilita...");
+        } else if (diagProgress === 60) {
+          diagStageName = "Stage 3: Sensori Ottici, WP & Bus Amiga...";
+          cliPrint("   Stage 3: Controllo sensore Traccia 00, WP e segnale READY...");
+        } else if (diagProgress === 80) {
+          diagStageName = "Stage 4: Benchmark Stepper & Ripetibilita...";
+          cliPrint("   Stage 4: Homing carrello e test di scorrimento guide...");
+          runBurnInSeek();
+        } else if (diagProgress >= 100) {
+          clearInterval(diagTimer);
+          physMotorOn = false;
+
+          // Compute diagnostic verdict based on active fault
+          generateReport();
+          uiState = 'DIAG_REPORT';
+          renderScreen();
+        }
+      }, 700);
+    }
+
+    function generateReport() {
+      const m = OEM_MODELS[selectedModelIdx];
+      let overall = 'PASS';
+      let errs = 0;
+      let warns = 0;
+      const sub = [];
+
+      // Subtest 1: Spindle
+      if (activeFault === 'chinon_caps') {
+        sub.push({ name: "Mandrino BLDC", res: "F", note: "Blocco rotazione (42 RPM)" });
+        overall = 'FAIL'; errs++;
+      } else if (activeFault === 'tandon_speed') {
+        sub.push({ name: "Mandrino Velocita", res: "F", note: "Fuori tolleranza (324 RPM)" });
+        overall = 'FAIL'; errs++;
+      } else {
+        sub.push({ name: "Mandrino Tachimetro", res: "P", note: `${m.rpm}.2 RPM (0.14% W&F)` });
+      }
+
+      // Subtest 2: Track 0
+      if (activeFault === 'track0_blind') {
+        sub.push({ name: "Sensore Traccia 00", res: "F", note: "Nessuna transizione rilevata" });
+        overall = 'FAIL'; errs++;
+      } else {
+        sub.push({ name: "Sensore Traccia 00", res: "P", note: "Transizione ottica perfetta" });
+      }
+
+      // Subtest 3: Repeatability
+      sub.push({ name: "Precisione Stepper", res: "P", note: "0 passi persi dopo 40 seek" });
+
+      // Subtest 4: Pin 34 Signal
+      if (activeFault === 'amiga_pin34') {
+        sub.push({ name: "Bus Amiga Pin 34", res: "F", note: "Segnale READY non asserito" });
+        overall = 'FAIL'; errs++;
+      } else {
+        sub.push({ name: "Bus Amiga Pin 34", res: "P", note: "READY attivo basso conforme" });
+      }
+
+      lastReport = { overall, errors: errs, warns, subtests: sub };
+
+      cliPrint(`======================================================================`);
+      cliPrint(`REFERTO FINALE: [ ${overall} ] - Errori: ${errs} | Avvisi: ${warns}`);
+      sub.forEach(s => cliPrint(`  [ ${s.res} ] ${s.name}: ${s.note}`));
+      cliPrint(`======================================================================`);
+      if (errs > 0) {
+        cliPrint(">> PRESCRITTO INTERVENTO TECNICO. Premi RUN sul tester per la guida.");
+      }
+    }
+
+    // Fault Injection Handler
+    function injectFault(type) {
+      activeFault = type;
+      playBeep(type === 'none' ? 2000 : 1000, 60);
+
+      document.querySelectorAll('[id^="fault-"]').forEach(b => {
+        b.className = "w-full text-left p-1.5 rounded bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 font-mono text-[11px] flex justify-between";
+      });
+
+      const btnMap = {
+        'none': 'fault-none',
+        'chinon_caps': 'fault-chinon',
+        'amiga_pin34': 'fault-pin34',
+        'tandon_speed': 'fault-tandon',
+        'track0_blind': 'fault-trk0'
+      };
+      const activeBtn = document.getElementById(btnMap[type]);
+      if (activeBtn) {
+        activeBtn.className = "w-full text-left p-1.5 rounded bg-cyan-950/80 border border-cyan-500 text-cyan-200 font-mono text-[11px] flex justify-between shadow";
+      }
+
+      cliPrint(`>> Fault Injection impostata su: '${type.toUpperCase()}'`);
+    }
+
+    // =========================================================================
+    // Virtual Serial CLI Engine
+    // =========================================================================
+    function cliPrint(text) {
+      const log = document.getElementById('cli-log');
+      log.textContent += text + "\n";
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function clearCli() {
+      document.getElementById('cli-log').textContent = "";
+    }
+
+    function handleCliSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('cli-input');
+      const cmd = input.value.trim();
+      input.value = "";
+      if (!cmd) return;
+
+      cliPrint(`FDD-Tester> ${cmd}`);
+      const tokens = cmd.toLowerCase().split(/\s+/);
+      const main = tokens[0];
+
+      if (main === 'help') {
+        cliPrint("Comandi disponibili:");
+        cliPrint("  status         - Visualizza stato alimentazioni, sensori e posizione");
+        cliPrint("  models         - Elenca i modelli di floppy drive supportati");
+        cliPrint("  motor [on|off] - Attiva o disattiva il motore mandrino");
+        cliPrint("  seek <n>       - Posiziona il carrello alla traccia <n>");
+        cliPrint("  rpm            - Misura istantanea velocita mandrino e Wow & Flutter");
+        cliPrint("  pwr all [on|off] - Controllo dei rail E-fuse +5V, +12V, +24V");
+        cliPrint("  diag [modello] - Avvia il collaudo automatico 5 stadi per il modello");
+        cliPrint("  clear          - Resetta gli allarmi e riarma gli E-fuse");
+      } else if (main === 'status') {
+        cliPrint(`Modello Corrente : ${OEM_MODELS[selectedModelIdx].name}`);
+        cliPrint(`Motore Mandrino  : ${physMotorOn ? 'ACCESO' : 'SPENTO'} (${physCurRpm.toFixed(1)} RPM)`);
+        cliPrint(`Carrello Testine : Traccia ${physCurTrack} / ${OEM_MODELS[selectedModelIdx].tracks - 1}`);
+        cliPrint(`Sensore Traccia0 : ${physCurTrack === 0 ? 'ATTIVO (0V)' : 'OFF'}`);
+        cliPrint(`Correnti Shunt   : +5V: ${physCurrent5V.toFixed(0)}mA | +12V: ${physCurrent12V.toFixed(0)}mA`);
+      } else if (main === 'motor') {
+        physMotorOn = (tokens[1] === 'on');
+        cliPrint(`Motore mandrino impostato su: ${physMotorOn ? 'ON' : 'OFF'}`);
+      } else if (main === 'seek') {
+        const trk = parseInt(tokens[1]);
+        if (!isNaN(trk)) {
+          physCurTrack = Math.max(0, Math.min(OEM_MODELS[selectedModelIdx].tracks - 1, trk));
+          playSeekTick(true);
+          cliPrint(`Carrello posizionato su Traccia ${physCurTrack}`);
+        }
+      } else if (main === 'rpm') {
+        cliPrint(`Velocita Mandrino : ${physCurRpm.toFixed(2)} RPM (Target: ${OEM_MODELS[selectedModelIdx].rpm} RPM)`);
+        cliPrint(`Wow & Flutter     : 0.14% | Periodo Indice: 199.8 ms`);
+      } else if (main === 'diag') {
+        if (tokens[1]) {
+          const match = OEM_MODELS.findIndex(m => m.name.toLowerCase().includes(tokens[1]));
+          if (match >= 0) selectedModelIdx = match;
+        }
+        startDiagnosticSuite();
+      } else if (main === 'clear') {
+        activeFault = 'none';
+        injectFault('none');
+        cliPrint("Allarmi cancellati. E-fuse armati.");
+      } else {
+        cliPrint(`Comando sconosciuto: '${cmd}'. Digita 'help' per la lista.`);
+      }
+    }
+
+    // Keyboard Shortcuts (Arrow keys, Enter, R, Esc)
+    window.addEventListener('keydown', (e) => {
+      if (document.activeElement === document.getElementById('cli-input')) return;
+      if (e.key === 'ArrowRight' || e.key === 'd') handleEncoderRotate(1);
+      else if (e.key === 'ArrowLeft' || e.key === 'a') handleEncoderRotate(-1);
+      else if (e.key === 'Enter') handleBtnEncClick();
+      else if (e.key === 'r' || e.key === 'R') handleBtnRun();
+      else if (e.key === 'Escape' || e.key === 'b' || e.key === 'B') handleBtnBack();
+    });
+
+    // Boot Welcome Message in CLI
+    cliPrint("=================================================");
+    cliPrint("  Retro-Diag FDD Master Tester Diagnostic Console");
+    cliPrint("  Author: Alessio Iodice <alessio67@gmail.com>");
+    cliPrint("  Hardware: STM32F407VET6 | KiCad 9 Validated");
+    cliPrint("  Display: 160x80 IPS RGB565 | Baud: 115200 8N1");
+    cliPrint("  Digita 'help' per visualizzare i comandi.");
+    cliPrint("=================================================");
+  </script>
+</body>
+</html>

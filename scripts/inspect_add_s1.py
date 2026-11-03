@@ -1,2 +1,0 @@
-with open(r"C:\Users\aless\OneDrive\temp\Manutenzione\Kicad_Project\FDD_Tester\scripts\add_s1_to_bz.py", "r", encoding="utf-8") as f:
-    print(f.read()[:2000])

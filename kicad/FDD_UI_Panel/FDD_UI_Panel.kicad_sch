@@ -5,7 +5,7 @@
   (uuid "a0000001-0001-4001-8001-000000000001")
   (paper "A4")
   (title_block
-    (title "FDD Tester - Front Panel UI Daughterboard")
+    (title "Retro-Diag FDD Master Tester — Front Panel UI Daughterboard")
     (date "2026-11-03")
     (rev "1.0")
     (company "Alessio Iodice")

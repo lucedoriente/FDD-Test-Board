@@ -1,0 +1,422 @@
+[
+  {
+    "filename": "Dysan 224.2A alignment floppy.pdf",
+    "relative_path": "00_Standards_and_Alignment/Dysan 224.2A alignment floppy.pdf",
+    "file_size_bytes": 59930,
+    "file_size_mb": 0.06,
+    "title": "Dysan Model 224/2A Alignment Diskette Specification & Calibration Procedure",
+    "category": "Standards & Alignment Instruments",
+    "manufacturer": "Dysan Corporation",
+    "source_url": "https://www.retrocmp.de/fdd/dysan/dysan-224-2a.pdf"
+  },
+  {
+    "filename": "FloppyExerciser.pdf",
+    "relative_path": "00_Standards_and_Alignment/FloppyExerciser.pdf",
+    "file_size_bytes": 1075042,
+    "file_size_mb": 1.03,
+    "title": "FloppyExerciser Multi-Format AVR Diagnostic Hardware Schematics",
+    "category": "Standards & Alignment Instruments",
+    "manufacturer": "Michael McMaster / Open Source",
+    "source_url": "https://github.com/michaels-home/FloppyExerciser"
+  },
+  {
+    "filename": "TEACO_4651_4651PC.pdf",
+    "relative_path": "00_Standards_and_Alignment/TEACO_4651_4651PC.pdf",
+    "file_size_bytes": 5189417,
+    "file_size_mb": 4.95,
+    "title": "TEACO Model 4651 / 4651PC Floppy Disk Drive Exerciser Manual",
+    "category": "Standards & Alignment Instruments",
+    "manufacturer": "TEACO Inc.",
+    "source_url": "https://www.bunkerofdoom.com/lit/teaco/TEACO_4651_4651PC.pdf"
+  },
+  {
+    "filename": "Mitsubishi_M2896_Thinline_8Inch_Maintenance_Manual.pdf",
+    "relative_path": "01_8_Inch_Drives/Mitsubishi/Mitsubishi_M2896_Thinline_8Inch_Maintenance_Manual.pdf",
+    "file_size_bytes": 5094595,
+    "file_size_mb": 4.86,
+    "title": "Mitsubishi M2896 Thinline 8Inch Maintenance Manual",
+    "category": "01_8_Inch_Drives",
+    "manufacturer": "Mitsubishi",
+    "source_url": "https://archive.org/search.php?query=Mitsubishi_M2896_Thinline_8Inch_Maintenance_Manual.pdf"
+  },
+  {
+    "filename": "QumeTrak_242_Maintenance_Manual_Feb83.pdf",
+    "relative_path": "01_8_Inch_Drives/Qume/QumeTrak_242_Maintenance_Manual_Feb83.pdf",
+    "file_size_bytes": 1682360,
+    "file_size_mb": 1.6,
+    "title": "QumeTrak 242 Maintenance Manual Feb83",
+    "category": "01_8_Inch_Drives",
+    "manufacturer": "Qume",
+    "source_url": "https://archive.org/search.php?query=QumeTrak_242_Maintenance_Manual_Feb83.pdf"
+  },
+  {
+    "filename": "QumeTrak_842_Maintenance_Manual_Dec82.pdf",
+    "relative_path": "01_8_Inch_Drives/Qume/QumeTrak_842_Maintenance_Manual_Dec82.pdf",
+    "file_size_bytes": 1824001,
+    "file_size_mb": 1.74,
+    "title": "QumeTrak 842 Maintenance Manual Dec82",
+    "category": "01_8_Inch_Drives",
+    "manufacturer": "Qume",
+    "source_url": "https://archive.org/search.php?query=QumeTrak_842_Maintenance_Manual_Dec82.pdf"
+  },
+  {
+    "filename": "Persci and Shugart Drives on the Cromemco 16FDC.pdf",
+    "relative_path": "01_8_Inch_Drives/Shugart/Persci and Shugart Drives on the Cromemco 16FDC.pdf",
+    "file_size_bytes": 139816,
+    "file_size_mb": 0.13,
+    "title": "Cromemco 16FDC Technical Guide: Interfacing PerSci & Shugart 8-Inch Drives",
+    "category": "8-Inch Floppy Drives",
+    "manufacturer": "Cromemco / Shugart / PerSci",
+    "source_url": "https://archive.org/details/bitsavers_cromemcoPeCromemco16FDC_2181775"
+  },
+  {
+    "filename": "Shugart_SA800_SA801_Service_Manual_Mar82.pdf",
+    "relative_path": "01_8_Inch_Drives/Shugart/Shugart_SA800_SA801_Service_Manual_Mar82.pdf",
+    "file_size_bytes": 9860654,
+    "file_size_mb": 9.4,
+    "title": "Shugart SA800 / SA801 Diskette Storage Drive Service Manual (Mar 1982)",
+    "category": "8-Inch Floppy Drives",
+    "manufacturer": "Shugart Associates",
+    "source_url": "http://www.bitsavers.org/pdf/shugart/SA8xx/39025-1_SA800_801_Service_Manual_Mar82.pdf"
+  },
+  {
+    "filename": "Shugart_SA850_SA851_Service_Manual_Dec80.pdf",
+    "relative_path": "01_8_Inch_Drives/Shugart/Shugart_SA850_SA851_Service_Manual_Dec80.pdf",
+    "file_size_bytes": 9896170,
+    "file_size_mb": 9.44,
+    "title": "Shugart SA850 / SA851 Double-Sided Diskette Drive Service Manual (Dec 1980)",
+    "category": "8-Inch Floppy Drives",
+    "manufacturer": "Shugart Associates",
+    "source_url": "https://bitsavers.org/pdf/shugart/SA8xx/39018-0_SA850_851_Service_Manual_Dec80.pdf"
+  },
+  {
+    "filename": "Siemens_FDD100-8_Maintenance_Manual.pdf",
+    "relative_path": "01_8_Inch_Drives/Siemens/Siemens_FDD100-8_Maintenance_Manual.pdf",
+    "file_size_bytes": 3992462,
+    "file_size_mb": 3.81,
+    "title": "Siemens FDD100-8 Maintenance Manual",
+    "category": "01_8_Inch_Drives",
+    "manufacturer": "Siemens",
+    "source_url": "https://archive.org/search.php?query=Siemens_FDD100-8_Maintenance_Manual.pdf"
+  },
+  {
+    "filename": "Chinon Floppy Drive F504.pdf",
+    "relative_path": "02_5_25_Inch_Drives/Chinon/Chinon Floppy Drive F504.pdf",
+    "file_size_bytes": 1036234,
+    "file_size_mb": 0.99,
+    "title": "Chinon F-504 5.25-Inch Half-Height Floppy Disk Drive Technical Specification",
+    "category": "5.25-Inch Floppy Drives",
+    "manufacturer": "Chinon Industries",
+    "source_url": "https://archive.org/details/chinon_f504_floppy_drive"
+  },
+  {
+    "filename": "Micropolis_1015_1016_Maintenance_Manual.pdf",
+    "relative_path": "02_5_25_Inch_Drives/Micropolis/Micropolis_1015_1016_Maintenance_Manual.pdf",
+    "file_size_bytes": 6710078,
+    "file_size_mb": 6.4,
+    "title": "Micropolis 1015 1016 Maintenance Manual",
+    "category": "02_5_25_Inch_Drives",
+    "manufacturer": "Micropolis",
+    "source_url": "https://archive.org/search.php?query=Micropolis_1015_1016_Maintenance_Manual.pdf"
+  },
+  {
+    "filename": "Panasonic_JU-475_Service_Manual.pdf",
+    "relative_path": "02_5_25_Inch_Drives/Panasonic_Matsushita/Panasonic_JU-475_Service_Manual.pdf",
+    "file_size_bytes": 2555372,
+    "file_size_mb": 2.44,
+    "title": "Panasonic JU-475 Service Manual",
+    "category": "02_5_25_Inch_Drives",
+    "manufacturer": "Panasonic_Matsushita",
+    "source_url": "https://archive.org/search.php?query=Panasonic_JU-475_Service_Manual.pdf"
+  },
+  {
+    "filename": "Shugart_SA400_Service_Manual.pdf",
+    "relative_path": "02_5_25_Inch_Drives/Shugart/Shugart_SA400_Service_Manual.pdf",
+    "file_size_bytes": 4117848,
+    "file_size_mb": 3.93,
+    "title": "Shugart SA400 Minifloppy Diskette Storage Drive Service Manual",
+    "category": "5.25-Inch Floppy Drives",
+    "manufacturer": "Shugart Associates",
+    "source_url": "http://deramp.com/downloads/floppy_drives/shugart/SA400%20Service%20Manual.pdf"
+  },
+  {
+    "filename": "1979 023-6017 Tandon TM100 Schematics.pdf",
+    "relative_path": "02_5_25_Inch_Drives/Tandon/1979 023-6017 Tandon TM100 Schematics.pdf",
+    "file_size_bytes": 1410295,
+    "file_size_mb": 1.34,
+    "title": "Tandon TM100 Component-Level Schematic Diagram (P/N 023-6017)",
+    "category": "5.25-Inch Floppy Drives",
+    "manufacturer": "Tandon Corporation",
+    "source_url": "https://archive.org/details/bitsavers_cromemco02Schematics1979_727933"
+  },
+  {
+    "filename": "Adjusting the radial alignment a Tandon TM100 -2A drive without an alignment disk.pdf",
+    "relative_path": "02_5_25_Inch_Drives/Tandon/Adjusting the radial alignment a Tandon TM100 -2A drive without an alignment disk.pdf",
+    "file_size_bytes": 1661669,
+    "file_size_mb": 1.58,
+    "title": "Technical Workshop Guide: Radial Alignment of Tandon TM100-2A Using Software & Reference Media",
+    "category": "5.25-Inch Floppy Drives",
+    "manufacturer": "RetroCMP Workshop",
+    "source_url": "https://retrocmp.de/fdd/tandon/tm100_alignment.htm"
+  },
+  {
+    "filename": "Cromemco Tandon TM100 Manual 023-6017 1979.pdf",
+    "relative_path": "02_5_25_Inch_Drives/Tandon/Cromemco Tandon TM100 Manual 023-6017 1979.pdf",
+    "file_size_bytes": 1753641,
+    "file_size_mb": 1.67,
+    "title": "Cromemco Tandon TM100 Minifloppy Maintenance & Theory of Operation Manual",
+    "category": "5.25-Inch Floppy Drives",
+    "manufacturer": "Cromemco / Tandon",
+    "source_url": "https://archive.org/details/bitsavers_cromemco02TM100Manual1979_3776632"
+  },
+  {
+    "filename": "Flexible Disk Drives _ Tandon TM100-2A _ Info __ retrocmp _ retro computing.pdf",
+    "relative_path": "02_5_25_Inch_Drives/Tandon/Flexible Disk Drives _ Tandon TM100-2A _ Info __ retrocmp _ retro computing.pdf",
+    "file_size_bytes": 656399,
+    "file_size_mb": 0.63,
+    "title": "Flexible Disk Drives   Tandon TM100-2A   Info    retrocmp   retro computing",
+    "category": "02_5_25_Inch_Drives",
+    "manufacturer": "Tandon",
+    "source_url": "https://archive.org/search.php?query=Flexible+Disk+Drives+_+Tandon+TM100-2A+_+Info+__+retrocmp+_+retro+computing.pdf"
+  },
+  {
+    "filename": "Sams_Tandon TM100-2_ocr.pdf",
+    "relative_path": "02_5_25_Inch_Drives/Tandon/Sams_Tandon TM100-2_ocr.pdf",
+    "file_size_bytes": 38754021,
+    "file_size_mb": 36.96,
+    "title": "Howard W. Sams Computerfacts: Tandon TM100-2 Disk Drive Circuit Schematics & Diagnostics",
+    "category": "5.25-Inch Floppy Drives",
+    "manufacturer": "Howard W. Sams & Co.",
+    "source_url": "https://archive.org/details/sams_computerfacts_tandon_tm100-2"
+  },
+  {
+    "filename": "TM100-1_TM100-2_48TPI_Operating_and_Service_Manual_1983_OCR.pdf",
+    "relative_path": "02_5_25_Inch_Drives/Tandon/TM100-1_TM100-2_48TPI_Operating_and_Service_Manual_1983_OCR.pdf",
+    "file_size_bytes": 5157361,
+    "file_size_mb": 4.92,
+    "title": "Tandon TM100-1 / TM100-2 48 TPI Operating and Service Manual (1983)",
+    "category": "5.25-Inch Floppy Drives",
+    "manufacturer": "Tandon Corporation",
+    "source_url": "https://archive.org/details/TM1001TM100248TPIOperatingAndServiceManual1983"
+  },
+  {
+    "filename": "TM100-1_TM100-2_48TPI_Users_Manual_1984_OCR.pdf",
+    "relative_path": "02_5_25_Inch_Drives/Tandon/TM100-1_TM100-2_48TPI_Users_Manual_1984_OCR.pdf",
+    "file_size_bytes": 1077406,
+    "file_size_mb": 1.03,
+    "title": "TM100-1 TM100-2 48TPI Users Manual 1984 OCR",
+    "category": "02_5_25_Inch_Drives",
+    "manufacturer": "Tandon",
+    "source_url": "https://archive.org/search.php?query=TM100-1_TM100-2_48TPI_Users_Manual_1984_OCR.pdf"
+  },
+  {
+    "filename": "Tandon TM100 Floppy Drive (Tandon).pdf",
+    "relative_path": "02_5_25_Inch_Drives/Tandon/Tandon TM100 Floppy Drive (Tandon).pdf",
+    "file_size_bytes": 936041,
+    "file_size_mb": 0.89,
+    "title": "Tandon TM100 Floppy Drive (Tandon)",
+    "category": "02_5_25_Inch_Drives",
+    "manufacturer": "Tandon",
+    "source_url": "https://archive.org/search.php?query=Tandon+TM100+Floppy+Drive+(Tandon).pdf"
+  },
+  {
+    "filename": "Tezza's Classic Computers Articles and Projects - Fixing a Tandon TM100 drive on a Kaypro II.pdf",
+    "relative_path": "02_5_25_Inch_Drives/Tandon/Tezza's Classic Computers Articles and Projects - Fixing a Tandon TM100 drive on a Kaypro II.pdf",
+    "file_size_bytes": 936036,
+    "file_size_mb": 0.89,
+    "title": "Tezza's Classic Computers Articles and Projects - Fixing a Tandon TM100 drive on a Kaypro II",
+    "category": "02_5_25_Inch_Drives",
+    "manufacturer": "Tandon",
+    "source_url": "https://archive.org/search.php?query=Tezza's+Classic+Computers+Articles+and+Projects+-+Fixing+a+Tandon+TM100+drive+on+a+Kaypro+II.pdf"
+  },
+  {
+    "filename": "tandon_tm100-2_terminator_1.pdf",
+    "relative_path": "02_5_25_Inch_Drives/Tandon/tandon_tm100-2_terminator_1.pdf",
+    "file_size_bytes": 327512,
+    "file_size_mb": 0.31,
+    "title": "tandon tm100-2 terminator 1",
+    "category": "02_5_25_Inch_Drives",
+    "manufacturer": "Tandon",
+    "source_url": "https://archive.org/search.php?query=tandon_tm100-2_terminator_1.pdf"
+  },
+  {
+    "filename": "tandon_tm100-2_under_front_latch.pdf",
+    "relative_path": "02_5_25_Inch_Drives/Tandon/tandon_tm100-2_under_front_latch.pdf",
+    "file_size_bytes": 156718,
+    "file_size_mb": 0.15,
+    "title": "tandon tm100-2 under front latch",
+    "category": "02_5_25_Inch_Drives",
+    "manufacturer": "Tandon",
+    "source_url": "https://archive.org/search.php?query=tandon_tm100-2_under_front_latch.pdf"
+  },
+  {
+    "filename": "tandon_tm100_rails.pdf",
+    "relative_path": "02_5_25_Inch_Drives/Tandon/tandon_tm100_rails.pdf",
+    "file_size_bytes": 611054,
+    "file_size_mb": 0.58,
+    "title": "tandon tm100 rails",
+    "category": "02_5_25_Inch_Drives",
+    "manufacturer": "Tandon",
+    "source_url": "https://archive.org/search.php?query=tandon_tm100_rails.pdf"
+  },
+  {
+    "filename": "Flexible Disk Drives _ TEAC FD-55 _ Info __ retrocmp _ retro computing.pdf",
+    "relative_path": "02_5_25_Inch_Drives/TEAC/Flexible Disk Drives _ TEAC FD-55 _ Info __ retrocmp _ retro computing.pdf",
+    "file_size_bytes": 476568,
+    "file_size_mb": 0.45,
+    "title": "Flexible Disk Drives   TEAC FD-55   Info    retrocmp   retro computing",
+    "category": "02_5_25_Inch_Drives",
+    "manufacturer": "TEAC",
+    "source_url": "https://archive.org/search.php?query=Flexible+Disk+Drives+_+TEAC+FD-55+_+Info+__+retrocmp+_+retro+computing.pdf"
+  },
+  {
+    "filename": "Floppy Disk Drives _ TEAC FD-55A _ Info __ retrocmp _ retro computing.pdf",
+    "relative_path": "02_5_25_Inch_Drives/TEAC/Floppy Disk Drives _ TEAC FD-55A _ Info __ retrocmp _ retro computing.pdf",
+    "file_size_bytes": 6278922,
+    "file_size_mb": 5.99,
+    "title": "Floppy Disk Drives   TEAC FD-55A   Info    retrocmp   retro computing",
+    "category": "02_5_25_Inch_Drives",
+    "manufacturer": "TEAC",
+    "source_url": "https://archive.org/search.php?query=Floppy+Disk+Drives+_+TEAC+FD-55A+_+Info+__+retrocmp+_+retro+computing.pdf"
+  },
+  {
+    "filename": "Floppy Disk Drives _ TEAC FD-55E _ Info __ retrocmp _ retro computing.pdf",
+    "relative_path": "02_5_25_Inch_Drives/TEAC/Floppy Disk Drives _ TEAC FD-55E _ Info __ retrocmp _ retro computing.pdf",
+    "file_size_bytes": 2702816,
+    "file_size_mb": 2.58,
+    "title": "Floppy Disk Drives   TEAC FD-55E   Info    retrocmp   retro computing",
+    "category": "02_5_25_Inch_Drives",
+    "manufacturer": "TEAC",
+    "source_url": "https://archive.org/search.php?query=Floppy+Disk+Drives+_+TEAC+FD-55E+_+Info+__+retrocmp+_+retro+computing.pdf"
+  },
+  {
+    "filename": "Floppy Disk Drives _ TEAC FD-55F _ Info __ retrocmp _ retro computing.pdf",
+    "relative_path": "02_5_25_Inch_Drives/TEAC/Floppy Disk Drives _ TEAC FD-55F _ Info __ retrocmp _ retro computing.pdf",
+    "file_size_bytes": 1372397,
+    "file_size_mb": 1.31,
+    "title": "Floppy Disk Drives   TEAC FD-55F   Info    retrocmp   retro computing",
+    "category": "02_5_25_Inch_Drives",
+    "manufacturer": "TEAC",
+    "source_url": "https://archive.org/search.php?query=Floppy+Disk+Drives+_+TEAC+FD-55F+_+Info+__+retrocmp+_+retro+computing.pdf"
+  },
+  {
+    "filename": "TEAC_FD-55GFR_Specification_and_Maintenance.pdf",
+    "relative_path": "02_5_25_Inch_Drives/TEAC/TEAC_FD-55GFR_Specification_and_Maintenance.pdf",
+    "file_size_bytes": 1235816,
+    "file_size_mb": 1.18,
+    "title": "TEAC FD-55GFR 5.25-Inch 1.2MB/360KB Dual-Speed Drive Engineering Specification & Maintenance",
+    "category": "5.25-Inch Floppy Drives",
+    "manufacturer": "TEAC Corporation",
+    "source_url": "http://deramp.com/downloads/floppy_drives/teac/TEAC%20FD-55GFR.pdf"
+  },
+  {
+    "filename": "TEAC_FD-55GS_Brochure_Feb91.pdf",
+    "relative_path": "02_5_25_Inch_Drives/TEAC/TEAC_FD-55GS_Brochure_Feb91.pdf",
+    "file_size_bytes": 2395172,
+    "file_size_mb": 2.28,
+    "title": "TEAC FD-55GS Brochure Feb91",
+    "category": "02_5_25_Inch_Drives",
+    "manufacturer": "TEAC",
+    "source_url": "https://archive.org/search.php?query=TEAC_FD-55GS_Brochure_Feb91.pdf"
+  },
+  {
+    "filename": "TEAC_FD-55R_Brochure_Nov90.pdf",
+    "relative_path": "02_5_25_Inch_Drives/TEAC/TEAC_FD-55R_Brochure_Nov90.pdf",
+    "file_size_bytes": 2555468,
+    "file_size_mb": 2.44,
+    "title": "TEAC FD-55R Brochure Nov90",
+    "category": "02_5_25_Inch_Drives",
+    "manufacturer": "TEAC",
+    "source_url": "https://archive.org/search.php?query=TEAC_FD-55R_Brochure_Nov90.pdf"
+  },
+  {
+    "filename": "TEAC_FD-55_Brochure_Mar85 (1).pdf",
+    "relative_path": "02_5_25_Inch_Drives/TEAC/TEAC_FD-55_Brochure_Mar85 (1).pdf",
+    "file_size_bytes": 5973686,
+    "file_size_mb": 5.7,
+    "title": "TEAC FD-55 Brochure Mar85 (1)",
+    "category": "02_5_25_Inch_Drives",
+    "manufacturer": "TEAC",
+    "source_url": "https://archive.org/search.php?query=TEAC_FD-55_Brochure_Mar85+(1).pdf"
+  },
+  {
+    "filename": "TEAC_FD-55_Brochure_Mar85.pdf",
+    "relative_path": "02_5_25_Inch_Drives/TEAC/TEAC_FD-55_Brochure_Mar85.pdf",
+    "file_size_bytes": 5973686,
+    "file_size_mb": 5.7,
+    "title": "TEAC FD-55 Brochure Mar85",
+    "category": "02_5_25_Inch_Drives",
+    "manufacturer": "TEAC",
+    "source_url": "https://archive.org/search.php?query=TEAC_FD-55_Brochure_Mar85.pdf"
+  },
+  {
+    "filename": "TEAC_FD-55_Jumper-settings.pdf",
+    "relative_path": "02_5_25_Inch_Drives/TEAC/TEAC_FD-55_Jumper-settings.pdf",
+    "file_size_bytes": 111771,
+    "file_size_mb": 0.11,
+    "title": "TEAC FD-55 Series (A/B/E/F/G/GFR) Comprehensive Jumper & Strap Configuration Guide",
+    "category": "5.25-Inch Floppy Drives",
+    "manufacturer": "TEAC Corporation",
+    "source_url": "https://www.retrocmp.de/fdd/teac/teac-fd-55.htm"
+  },
+  {
+    "filename": "TEAC_FD-235HG_3Mode_Specification.pdf",
+    "relative_path": "03_3_5_Inch_Drives/TEAC_FD-235HG_3Mode_Specification.pdf",
+    "file_size_bytes": 5790,
+    "file_size_mb": 0.01,
+    "title": "TEAC FD-235HG 3Mode Specification",
+    "category": "03_3_5_Inch_Drives",
+    "manufacturer": "TEAC_FD-235HG_3Mode_Specification.pdf",
+    "source_url": "https://archive.org/search.php?query=TEAC_FD-235HG_3Mode_Specification.pdf"
+  },
+  {
+    "filename": "Apple_3.5_Drive_Schematic.pdf",
+    "relative_path": "03_3_5_Inch_Drives/Apple_Macintosh/Apple_3.5_Drive_Schematic.pdf",
+    "file_size_bytes": 525563,
+    "file_size_mb": 0.5,
+    "title": "Apple 3.5 Drive Schematic",
+    "category": "03_3_5_Inch_Drives",
+    "manufacturer": "Apple_Macintosh",
+    "source_url": "https://archive.org/search.php?query=Apple_3.5_Drive_Schematic.pdf"
+  },
+  {
+    "filename": "Apple_400K_Disk_Drive_Dec84.pdf",
+    "relative_path": "03_3_5_Inch_Drives/Apple_Macintosh/Apple_400K_Disk_Drive_Dec84.pdf",
+    "file_size_bytes": 1398712,
+    "file_size_mb": 1.33,
+    "title": "Apple 400K Disk Drive Dec84",
+    "category": "03_3_5_Inch_Drives",
+    "manufacturer": "Apple_Macintosh",
+    "source_url": "https://archive.org/search.php?query=Apple_400K_Disk_Drive_Dec84.pdf"
+  },
+  {
+    "filename": "Apple_drive_command_and_status_codes.pdf",
+    "relative_path": "03_3_5_Inch_Drives/Apple_Macintosh/Apple_drive_command_and_status_codes.pdf",
+    "file_size_bytes": 72611,
+    "file_size_mb": 0.07,
+    "title": "Apple drive command and status codes",
+    "category": "03_3_5_Inch_Drives",
+    "manufacturer": "Apple_Macintosh",
+    "source_url": "https://archive.org/search.php?query=Apple_drive_command_and_status_codes.pdf"
+  },
+  {
+    "filename": "Apple II Disk II Manuel d_installation.pdf",
+    "relative_path": "05_Proprietary_Retro_Mechanics/Apple_Disk_II/Apple II Disk II Manuel d_installation.pdf",
+    "file_size_bytes": 2485554,
+    "file_size_mb": 2.37,
+    "title": "Apple II Disk II Floppy Subsystem Technical & Installation Guide (Shugart SA390)",
+    "category": "Retro Systems Mechanics",
+    "manufacturer": "Apple Computer, Inc.",
+    "source_url": "https://archive.org/details/apple-ii-disk-ii-manual"
+  },
+  {
+    "filename": "Commodore_1540_1541_Service_Manual_Nov85.pdf",
+    "relative_path": "05_Proprietary_Retro_Mechanics/Commodore_1541_Mechanics/Commodore_1540_1541_Service_Manual_Nov85.pdf",
+    "file_size_bytes": 793022,
+    "file_size_mb": 0.76,
+    "title": "Commodore 1540 / 1541 Disk Drive Service Manual (Nov 1985 P/N 314002-01)",
+    "category": "Retro Systems Mechanics",
+    "manufacturer": "Commodore Business Machines",
+    "source_url": "https://www.zimmers.net/anonftp/pub/cbm/schematics/drives/new/1541/1540-1541_Disk_Drive_Service_Manual_314002-01_(1985_Nov).pdf"
+  }
+]

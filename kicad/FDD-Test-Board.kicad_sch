@@ -6,7 +6,7 @@
   (paper "A3")
   (title_block
     (title "Retro-Diag FDD Master Tester & Exerciser — Master Root Schematic")
-    (date "2026-11-02")
+    (date "2026-11-03")
     (rev "1.0")
     (company "Alessio Iodice")
     (comment 1 "Author / Hardware Designer: Alessio Iodice <alessio67@gmail.com>")
