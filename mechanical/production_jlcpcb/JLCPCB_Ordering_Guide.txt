@@ -1,0 +1,38 @@
+=============================================================================
+RETRO-DIAG FDD MASTER TESTER & EXERCISER - 3D PRINTING ORDER GUIDE (JLCPCB)
+Author: Alessio Iodice <alessio67@gmail.com>
+=============================================================================
+
+1. UPLOAD INSTRUCTIONS (JLCPCB 3D Printing):
+   Go to: https://jlcpcb.com/3d-printing
+   
+   Upload the two parts individually (either STEP or STL format):
+   - Part 1: 01_Base_Tray.step (or 01_Base_Tray.stl)
+   - Part 2: 02_Upper_Hood.step (or 02_Upper_Hood.stl)
+
+2. RECOMMENDED MANUFACTURING SPECIFICATIONS:
+
+   [Option A - High Aesthetic Desktop Finish (Recommended)]:
+   - Technology: SLA (Stereolithography)
+   - Material  : 8000 White Resin (or 8001 / Black Resin / Imagine Black)
+   - Color     : White or Black
+   - Layer H   : 0.1 mm standard (or 0.05 mm fine)
+   - Infill    : 100% Solid
+   - Surface   : Clean / Sanded (Matte)
+
+   [Option B - Heavy Duty Workshop / Industrial]:
+   - Technology: SLS / MJF
+   - Material  : PA12-HP Nylon (Natural Grey / Dyed Black)
+   - Infill    : Solid
+
+3. PART DIMENSIONS & METRICS:
+   - Part 1: Base_Tray  -> 320.0 x 185.0 x 38.0 mm
+   - Part 2: Upper_Hood -> 320.0 x 185.0 x 70.0 mm
+   - Wall Thickness     : 3.0 mm uniform
+   - Screw Bosses       : Optimized lightweight ribbed bosses (M3, dia 2.5mm pre-hole)
+
+4. HARDWARE FASTENERS REQUIRED:
+   - 5x M3 x 16mm or M3 x 20mm Countersunk (Flat Head) Screws for Case Assembly
+   - 6x M3 x 6mm or M3 x 8mm Pan Head / Self-tapping Screws for Mainboard Standoffs (H1..H7)
+   - 4x M3 x 6mm Pan Head Screws for Mean Well PSU Standoffs
+=============================================================================

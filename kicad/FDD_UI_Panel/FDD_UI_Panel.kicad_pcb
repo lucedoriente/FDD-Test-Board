@@ -3606,45 +3606,16 @@
 			)
 		)
 	)
-	(gr_line
-		(start 120 38)
-		(end 0 38)
-		(stroke
-			(width 0.15)
-			(type default)
-		)
-		(layer "Edge.Cuts")
-		(uuid "4d7a438b-bcce-4fe0-a3d8-b9e6554fbcb4")
-	)
-	(gr_line
-		(start 0 38)
-		(end 0 0)
-		(stroke
-			(width 0.15)
-			(type default)
-		)
-		(layer "Edge.Cuts")
-		(uuid "76686705-147c-49e1-9f70-ab95823339f6")
-	)
-	(gr_line
+	(gr_rect
 		(start 0 0)
-		(end 120 0)
-		(stroke
-			(width 0.15)
-			(type default)
-		)
-		(layer "Edge.Cuts")
-		(uuid "ab6aed11-ebd2-47fa-98a8-eaaee7b65fd3")
-	)
-	(gr_line
-		(start 120 0)
 		(end 120 38)
 		(stroke
 			(width 0.15)
 			(type default)
 		)
+		(fill no)
 		(layer "Edge.Cuts")
-		(uuid "d20cee4d-83df-4a4b-8af0-45b0debc9189")
+		(uuid "14207783-0450-4224-8eb9-0ac649b9da0b")
 	)
 	(gr_text "RESET"
 		(at 54.25 20.8 0)
